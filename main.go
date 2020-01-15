@@ -3,5 +3,11 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("hello")
+	messages := make(chan string, 2)
+
+	messages <- "Golang"
+
+	value := <- messages
+
+	fmt.Println(value)
 }
