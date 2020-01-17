@@ -1,37 +1,36 @@
-package main
+package  main
 
 import (
+	"database/sql"
 	"fmt"
-	"sync"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/google/uuid"
+	"time"
 )
-var wg sync.WaitGroup
 
-func printCounts(label string, count chan int) {
-	defer wg.Done()
-	for {
-		val, ok := <- count
-		if !ok {
-			fmt.Println("Channel was closed")
-			return
-		}
-		fmt.Printf("Count: %d received from %s \n", val, label)
-		if val == 10 {
-			fmt.Printf("Channel closed from %s \n", label)
-			close(count)
-			return
-		}
-		val++
-		count <- val
+func connectDB() *sql.DB {
+	db, err := sql.Open("mysql", "root:123456aA@@tcp(127.0.0.1:3306)/test")
+
+	if err != nil {
+		panic(err.Error())
 	}
+	fmt.Println("Connect successfully")
+	return db
 }
+
 func main() {
-	count := make(chan int)
-	wg.Add(2)
-	fmt.Println("Start Goroutines")
-	go printCounts("A", count)
-	go printCounts("B", count)
-	count <- 1
-	fmt.Println("Waiting to finish")
-	wg.Wait()
-	fmt.Println("\nTerminating program")
+	db := connectDB()
+	defer  db.Close()
+	id := uuid.New().String()
+	firstName := "Quan"
+	lastName := "Nguyen"
+	middleName := "Sy"
+	createdAt := time.Now()
+	updatedAt := time.Now()
+	insForm, err := db.Prepare("INSERT INTO user(id, first_name, middle_name, last_name, created_at, updated_at) values(?, ?, ?, ?, ?, ?)")
+	if err != nil {
+		panic(err.Error())
+	}
+	insForm.Exec(id, firstName, lastName, middleName, createdAt, updatedAt)
+	fmt.Println("Insert succesfully")
 }

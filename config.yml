@@ -1,0 +1,3 @@
+server:
+    porst: 8080
+    host: "localhost"
