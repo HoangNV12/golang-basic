@@ -14,7 +14,7 @@ func(m *liteHandler1) ServeHTTP(w http.ResponseWriter, r * http.Request) {
 }
 func main() {
 	mux := http.NewServeMux()
-	fs := http.FileServer(http.Dir("html"))
+	fs := http.FileServer(http.Dir("./html"))
 	mux.Handle("/", fs)
 	hdl := &liteHandler1{"Chào mừng đến lập trình Go cho web"}
 	mux.Handle("/welcome", hdl)
