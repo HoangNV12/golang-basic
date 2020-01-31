@@ -2,22 +2,27 @@ package main
 
 import "fmt"
 
-func ChuyenHamAnonyMousVaoFunc(i func(a string) string) {
-	fmt.Println(i("Hoang"))
+type person struct {
+	name string
+	age int
 }
-func TraVeHamAnonymous() func(i string) string {
-	return func(i string) string {
-		return i + " is a blogger"
-	}
+type teacher struct {
+	bang string
+	soNamKinhNghiem int
+	baseInfo person
 }
+
 func main()  {
-	ChuyenHamAnonyMousVaoFunc(func(name string) string {
-		return "Welcome " + name
-	})
-	greeting := func(name string) string{
-		return "Hello " + name
+	t1 := teacher{
+		bang:            "DH Dai Nam",
+		soNamKinhNghiem: 4,
+		baseInfo:        person{
+			name: "Nguyen Van Hoang",
+			age: 30,
+		},
 	}
-	ChuyenHamAnonyMousVaoFunc(greeting)
-	introduction := TraVeHamAnonymous()
-	fmt.Println(introduction("Hoang"))
+	//in thong tin
+	fmt.Println(t1.baseInfo.name)
+	fmt.Println(t1.bang)
+
 }
